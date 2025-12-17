@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        Restaurant Billing System
+    </title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="logo">Restaurant</h1>
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="index.html">Menu</a></li>
+                <li><a href="cart.html" class="active">Cart <span class="cart-count">0</span></a></li>
+                <li><a href="manage-menu.html">Manage Menu</a></li>
+                <li><a href="sales-report.html">Sales Report</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h2>Your Cart</h2>
+        </div>
+
+        <div class="cart-container">
+            <div class="cart-items-section">
+                <div id="cart-items" class="cart-items">
+                    <!-- Cart items will be dynamically loaded here --> 
+                </div>
+            </div>
+
+            <div class="cart-summary">
+                <div class="summary-card">
+                    <h3>Bill Summary</h3>
+                    <div class="summary-row">
+                        <span>Total Amount:</span>
+                        <span id="cart-total" class="total-amount">₹0</span>
+                    </div>
+                    <div class="cart-actions">
+                        <button class="btn btn-primary" onclick="showQRCode()">Pay Now</button>
+                        <button class="btn btn-secondary" onclick="printBill()">Print Bill</button>
+                        <button class="btn btn-danger" onclick="clearCart()">Clear Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- QR Code Modal -->
+    <div id="qr-modal" class="modal" onclick="if(event.target === this) closeQRModal()">
+        <div class="modal-content">
+            <span class="close" onclick="closeQRModal()">&times;</span>
+            <h2>Payment</h2>
+            <div class="qr-container">
+                <p class="qr-total">Total Amount: <strong id="qr-total-amount">₹0</strong></p>
+                <div class="qr-code-placeholder">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=UPI_ID:your-upi-id@paytm&amount=0" alt="QR Code" id="qr-image">
+                    <p>Scan to pay via UPI</p>
+                </div>
+                <p class="qr-note">Note: Replace with your actual UPI QR code</p>
+                <button class="btn btn-primary" onclick="completePayment()">Complete Payment</button>
+                <button class="btn btn-secondary" onclick="closeQRModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/menu.js"></script>
+    <script src="js/cart.js"></script>
+    <script>
+        // Toggle mobile menu
+        function toggleMobileMenu() {
+            var navMenu = document.getElementById('nav-menu');
+            if (navMenu) {
+                navMenu.classList.toggle('active');
+            }
+        }
+
+        // Wait for DOM and scripts to load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update QR code image when modal opens
+            var originalShowQRCode = window.showQRCode;
+            if (originalShowQRCode) {
+                window.showQRCode = function() {
+                    try {
+                        var cart = loadCart();
+                        var total = calculateTotal();
+                        var qrImage = document.getElementById('qr-image');
+                        var qrTotalElement = document.getElementById('qr-total-amount');
+                        if (qrImage && total > 0) {
+                            // Update QR code with total amount (example UPI format)
+                            qrImage.src = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=UPI_ID:your-upi-id@paytm&amount=' + total.toFixed(2);
+                        }
+                        if (qrTotalElement) {
+                            qrTotalElement.textContent = '₹' + total.toFixed(2);
+                        }
+                        originalShowQRCode();
+                    } catch (error) {
+                        console.error('Error showing QR code:', error);
+                        originalShowQRCode();
+                    }
+                };
+            }
+            
+            // Ensure cart displays on load
+            if (typeof displayCart === 'function') {
+                displayCart();
+            }
+        });
+    </script>
+</body>
+</html>
+

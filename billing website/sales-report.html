@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Billing System - Sales Report</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="logo">Restaurant</h1>
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="index.html">Menu</a></li>
+                <li><a href="cart.html">Cart <span class="cart-count">0</span></a></li>
+                <li><a href="manage-menu.html">Manage Menu</a></li>
+                <li><a href="sales-report.html" class="active">Sales Report</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h2>Monthly Sales Report</h2>
+        </div>
+
+        <div class="report-filters">
+            <div class="filter-group">
+                <label for="report-month">Month:</label>
+                <select id="report-month">
+                    <option value="0">January</option>
+                    <option value="1">February</option>
+                    <option value="2">March</option>
+                    <option value="3">April</option>
+                    <option value="4">May</option>
+                    <option value="5">June</option>
+                    <option value="6">July</option>
+                    <option value="7">August</option>
+                    <option value="8">September</option>
+                    <option value="9">October</option>
+                    <option value="10">November</option>
+                    <option value="11">December</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="report-year">Year:</label>
+                <select id="report-year">
+                    <!-- Years will be dynamically populated -->
+                </select>
+            </div>
+        </div>
+
+        <div id="report-container" class="report-container">
+            <!-- Report will be dynamically loaded here -->
+        </div>
+    </main>
+
+    <script src="js/menu.js"></script>
+    <script src="js/sales-report.js"></script>
+    <script>
+        // Toggle mobile menu
+        function toggleMobileMenu() {
+            var navMenu = document.getElementById('nav-menu');
+            if (navMenu) {
+                navMenu.classList.toggle('active');
+            }
+        }
+    </script>
+</body>
+</html>
+
